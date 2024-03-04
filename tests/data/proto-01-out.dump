@@ -1,0 +1,90 @@
+ProtocolDeclarationNode                                 : @namespace("org.apache.avro.test")
+    ├── EnumDeclarationNode                             : @namespace("org.apache.avro.test") @[{"aliases":["org.foo.KindOf"]}]
+    │   ├── EnumConstantNode                            :
+    │   ├── EnumConstantNode                            :
+    │   └── EnumConstantNode                            :
+    ├── FixedDeclarationNode                            : @namespace("org.apache.avro.test")
+    ├── RecordDeclarationNode                           : @namespace("org.apache.avro.test") TestRecord
+    │   ├── FieldDeclarationNode                        :
+    │   │   ├── TypeNode                                :
+    │   │   │   └── PrimitiveTypeNode                   : string
+    │   │   └── VariableDeclaratorNode                  : name @[{"order":"ignore"}]
+    │   ├── FieldDeclarationNode                        :
+    │   │   ├── TypeNode                                :
+    │   │   │   └── ReferenceTypeNode                   : Kind
+    │   │   └── VariableDeclaratorNode                  : kind @[{"order":"descending"}]
+    │   ├── FieldDeclarationNode                        :
+    │   │   ├── TypeNode                                :
+    │   │   │   └── ReferenceTypeNode                   : MD5
+    │   │   └── VariableDeclaratorNode                  : hash
+    │   ├── FieldDeclarationNode                        :
+    │   │   ├── TypeNode                                :
+    │   │   │   └── UnionTypeNode                       :
+    │   │   │       ├── TypeNode                        :
+    │   │   │       │   └── PrimitiveTypeNode           : null
+    │   │   │       └── TypeNode                        :
+    │   │   │           └── ReferenceTypeNode           : MD5
+    │   │   └── VariableDeclaratorNode                  : nullableHash @[{"aliases":["hash"]}]
+    │   │       └── JsonValueNode                       : null
+    │   └── FieldDeclarationNode                        :
+    │       ├── TypeNode                                :
+    │       │   └── ArrayTypeNode                       :
+    │       │       └── TypeNode                        :
+    │       │           └── PrimitiveTypeNode           : long
+    │       └── VariableDeclaratorNode                  : arrayOfLongs
+    ├── ErrorDeclarationNode                            : @namespace("org.apache.avro.test")
+    │   └── FieldDeclarationNode                        :
+    │       ├── TypeNode                                :
+    │       │   └── PrimitiveTypeNode                   : string
+    │       └── VariableDeclaratorNode                  : message
+    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") hello
+    │   ├── ResultTypeNode                              :
+    │   │   └── TypeNode                                :
+    │   │       └── PrimitiveTypeNode                   : string
+    │   └── FormalParametersNode                        :
+    │       └── FormalParameterNode                     :
+    │           ├── TypeNode                            :
+    │           │   └── PrimitiveTypeNode               : string
+    │           └── VariableDeclaratorNode              : greeting
+    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") echo
+    │   ├── ResultTypeNode                              :
+    │   │   └── TypeNode                                :
+    │   │       └── ReferenceTypeNode                   : TestRecord
+    │   └── FormalParametersNode                        :
+    │       └── FormalParameterNode                     :
+    │           ├── TypeNode                            :
+    │           │   └── ReferenceTypeNode               : TestRecord
+    │           └── VariableDeclaratorNode              : record
+    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") add
+    │   ├── ResultTypeNode                              :
+    │   │   └── TypeNode                                :
+    │   │       └── PrimitiveTypeNode                   : int
+    │   └── FormalParametersNode                        :
+    │       ├── FormalParameterNode                     :
+    │       │   ├── TypeNode                            :
+    │       │   │   └── PrimitiveTypeNode               : int
+    │       │   └── VariableDeclaratorNode              : arg1
+    │       └── FormalParameterNode                     :
+    │           ├── TypeNode                            :
+    │           │   └── PrimitiveTypeNode               : int
+    │           └── VariableDeclaratorNode              : arg2
+    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") echoBytes
+    │   ├── ResultTypeNode                              :
+    │   │   └── TypeNode                                :
+    │   │       └── PrimitiveTypeNode                   : bytes
+    │   └── FormalParametersNode                        :
+    │       └── FormalParameterNode                     :
+    │           ├── TypeNode                            :
+    │           │   └── PrimitiveTypeNode               : bytes
+    │           └── VariableDeclaratorNode              : data
+    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") error
+    │   ├── ResultTypeNode                              : void
+    │   ├── FormalParametersNode                        :
+    │   └── ErrorListNode                               :
+    │       └── TypeNode                                :
+    │           └── ReferenceTypeNode                   : TestError
+    └── MessageDeclarationNode                          : @namespace("org.apache.avro.test") ping
+        ├── ResultTypeNode                              : void
+        ├── FormalParametersNode                        :
+        └── TypeNode                                    :
+            └── OnewayStatementNode                     :

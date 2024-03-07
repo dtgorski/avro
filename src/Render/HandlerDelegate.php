@@ -10,7 +10,6 @@ use Avro\Tree\Node;
 use Avro\Visitable;
 use Avro\Visitor;
 
-/** @internal */
 class HandlerDelegate implements Visitor
 {
     /** @param NodeHandler[] $handlers */

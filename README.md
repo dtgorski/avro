@@ -2,6 +2,11 @@
 
 Apache Avro IDL Transpiler
 
+## Installation
+```sh
+$ composer require dtgorski/avro
+```
+
 ### @dev
 
 Try ```make```:

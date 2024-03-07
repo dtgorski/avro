@@ -5,3 +5,4 @@
 Makefile        export-ignore
 README.md       export-ignore
 tests           export-ignore
+composer.lock   export-ignore

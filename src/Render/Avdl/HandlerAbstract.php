@@ -46,7 +46,6 @@ abstract class HandlerAbstract implements NodeHandler
 
         $isProtoNode = $node instanceof ProtocolDeclarationNode;
         $isFieldNode = $node instanceof FieldDeclarationNode;
-        $isNamedNode = $node instanceof NamedDeclarationNode;
 
         $hasComments = !$node->getComments()->isEmpty();
         $hasProperties = !$node->getProperties()->isEmpty();
@@ -58,14 +57,14 @@ abstract class HandlerAbstract implements NodeHandler
         $this->writeComments($node->getComments());
         $this->writePropertiesMultiLine($node->getProperties());
 
-        if (!$isProtoNode && !$isNamedNode) {
+        if (!$node instanceof NamedDeclarationNode) {
             return true;
         }
 
         if (!$node->getNamespace()->isEmpty()) {
             $namespace = $node->getNamespace();
 
-            /** @var DeclarationNode|null $parent calms static analysis down. */
+            /** @var NamedDeclarationNode|null $parent calms static analysis down. */
             $parent = $node->parentNode();
             $sameNs = $parent != null && $parent->getNamespace()->equals($namespace);
 

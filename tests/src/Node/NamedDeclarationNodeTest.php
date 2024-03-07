@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Avro\Tests\Node;
 
 use Avro\AvroName;
+use Avro\AvroNamespace;
 use Avro\Node\NamedDeclarationNode;
 use Avro\Tests\AvroTestCase;
 
@@ -29,5 +30,19 @@ class NamedDeclarationNodeTest extends AvroTestCase
         $name = AvroName::fromString('foo');
         $type = new NamedDeclarationNode($name);
         $this->assertSame($name, $type->getName());
+    }
+
+
+    public function testSetGetNamespace(): void
+    {
+        $name = AvroName::fromString('foo');
+        $node = new class ($name) extends NamedDeclarationNode {
+        };
+
+        $this->assertSame('', $node->getNamespace()->getValue());
+
+        $namespace = $this->createMock(AvroNamespace::class);
+        $node->setNamespace($namespace);
+        $this->assertSame($namespace, $node->getNamespace());
     }
 }

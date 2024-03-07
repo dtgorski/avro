@@ -18,6 +18,7 @@ use Avro\Write\BufferedWriter;
  * @uses   \Avro\AvroName
  * @uses   \Avro\AvroNamespace
  * @uses   \Avro\Node\DeclarationNode
+ * @uses   \Avro\Node\NamedDeclarationNode
  * @uses   \Avro\Node\ProtocolDeclarationNode
  * @uses   \Avro\Render\Avdl\HandlerAbstract
  * @uses   \Avro\Render\Avdl\HandlerContext

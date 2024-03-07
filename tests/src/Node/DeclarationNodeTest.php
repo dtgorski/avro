@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 namespace Avro\Tests\Node;
 
-use Avro\AvroNamespace;
 use Avro\Node\DeclarationNode;
 use Avro\Tests\AvroTestCase;
 use Avro\Tree\Comment;
@@ -15,7 +14,6 @@ use Avro\Tree\Comments;
 /**
  * @covers \Avro\Node\DeclarationNode
  * @uses   \Avro\AvroFilePath
- * @uses   \Avro\AvroNamespace
  * @uses   \Avro\Shared\EntityMap
  * @uses   \Avro\Tree\AstNode
  * @uses   \Avro\Tree\Comment
@@ -43,16 +41,5 @@ class DeclarationNodeTest extends AvroTestCase
         foreach ($node->getComments() as $comment) {
             $test($comment, $i++);
         }
-    }
-
-    public function testSetGetNamespace(): void
-    {
-        $node = new class extends DeclarationNode {
-        };
-        $this->assertSame('', $node->getNamespace()->getValue());
-
-        $namespace = $this->createMock(AvroNamespace::class);
-        $node->setNamespace($namespace);
-        $this->assertSame($namespace, $node->getNamespace());
     }
 }

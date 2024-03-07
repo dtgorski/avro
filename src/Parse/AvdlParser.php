@@ -25,6 +25,7 @@ use Avro\Node\JsonNode;
 use Avro\Node\LogicalTypeNode;
 use Avro\Node\MapTypeNode;
 use Avro\Node\MessageDeclarationNode;
+use Avro\Node\NamedDeclarationNode;
 use Avro\Node\OnewayStatementNode;
 use Avro\Node\PrimitiveTypeNode;
 use Avro\Node\ProtocolDeclarationNode;
@@ -103,13 +104,13 @@ class AvdlParser extends JsonParser
                 continue;
             }
 
-            /** @var DeclarationNode $declaration calms static analysis down. */
-            $declaration = $this->parseDeclaration();
+            /** @var DeclarationNode $node calms static analysis down. */
+            $node = $this->parseDeclaration();
 
-            if ($declaration->getNamespace()->isEmpty()) {
-                $declaration->setNamespace($namespace);
+            if ($node instanceof NamedDeclarationNode && $node->getNamespace()->isEmpty()) {
+                $node->setNamespace($namespace);
             }
-            $nodes[] = $declaration;
+            $nodes[] = $node;
         }
 
         $this->consumeWithHint(Token::RBRACE, self::hintProtocolBodyClose);
@@ -143,14 +144,14 @@ class AvdlParser extends JsonParser
     {
         $propertyBag = $this->parsePropertiesWithNamespace();
 
-        /** @var DeclarationNode $declaration calms static analysis down, */
-        $declaration = $this->expect(Token::IDENT, ...NamedType::values())
-            ? $this->parseNamedDeclaration($propertyBag->getProperties())
-            : $this->parseMessageDeclaration($propertyBag->getProperties());
+        if ($this->expect(Token::IDENT, ...NamedType::values())) {
+            /** @var NamedDeclarationNode $node calms static analysis down, */
+            $node = $this->parseNamedDeclaration($propertyBag->getProperties());
+            $node->setNamespace($propertyBag->getNamespace());
 
-        $declaration->setNamespace($propertyBag->getNamespace());
-
-        return $declaration;
+            return $node;
+        }
+        return $this->parseMessageDeclaration($propertyBag->getProperties());
     }
 
     /**

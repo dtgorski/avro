@@ -13,26 +13,13 @@ use Avro\Tree\Properties;
 
 abstract class DeclarationNode extends AstNode
 {
-    private AvroNamespace $namespace;
     private Comments $comments;
 
     /** @throws \Exception */
     public function __construct(?Properties $properties = null)
     {
         parent::__construct($properties);
-        $this->namespace = AvroNamespace::fromString('');
         $this->comments = Comments::fromArray([]);
-    }
-
-    public function getNamespace(): AvroNamespace
-    {
-        return $this->namespace;
-    }
-
-    public function setNamespace(AvroNamespace $namespace): DeclarationNode
-    {
-        $this->namespace = $namespace;
-        return $this;
     }
 
     /** @return Comments */

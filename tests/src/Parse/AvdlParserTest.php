@@ -28,6 +28,7 @@ use Avro\Tests\AvroTestCase;
  * @uses   \Avro\Node\JsonNode
  * @uses   \Avro\Node\JsonValueNode
  * @uses   \Avro\Node\MessageDeclarationNode
+ * @uses   \Avro\Node\NamedDeclarationNode
  * @uses   \Avro\Node\ProtocolDeclarationNode
  * @uses   \Avro\Node\ReferenceTypeNode
  * @uses   \Avro\Node\ResultTypeNode

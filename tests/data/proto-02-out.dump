@@ -199,7 +199,7 @@ ProtocolDeclarationNode                                 : @namespace("foo.bar") 
     │   ├── EnumConstantNode                            :
     │   └── EnumConstantNode                            :
     ├── ErrorDeclarationNode                            : @namespace("foo.bar")
-    ├── MessageDeclarationNode                          : @namespace("foo.bar") error
+    ├── MessageDeclarationNode                          : error
     │   ├── ResultTypeNode                              : void
     │   ├── FormalParametersNode                        :
     │   └── ErrorListNode                               :
@@ -207,12 +207,12 @@ ProtocolDeclarationNode                                 : @namespace("foo.bar") 
     │       │   └── ReferenceTypeNode                   : FooError
     │       └── TypeNode                                :
     │           └── ReferenceTypeNode                   : Error
-    ├── MessageDeclarationNode                          : @namespace("foo.bar") ping
+    ├── MessageDeclarationNode                          : ping
     │   ├── ResultTypeNode                              : void
     │   ├── FormalParametersNode                        :
     │   └── TypeNode                                    :
     │       └── OnewayStatementNode                     :
-    ├── MessageDeclarationNode                          : @namespace("foo.bar") hello
+    ├── MessageDeclarationNode                          : hello
     │   ├── ResultTypeNode                              :
     │   │   └── TypeNode                                :
     │   │       └── PrimitiveTypeNode                   : string
@@ -221,7 +221,7 @@ ProtocolDeclarationNode                                 : @namespace("foo.bar") 
     │           ├── TypeNode                            :
     │           │   └── PrimitiveTypeNode               : string
     │           └── VariableDeclaratorNode              : greeting
-    ├── MessageDeclarationNode                          : @namespace("foo.bar") echo
+    ├── MessageDeclarationNode                          : echo
     │   ├── ResultTypeNode                              :
     │   │   └── TypeNode                                :
     │   │       └── ReferenceTypeNode                   : FooType
@@ -230,7 +230,7 @@ ProtocolDeclarationNode                                 : @namespace("foo.bar") 
     │           ├── TypeNode                            :
     │           │   └── ReferenceTypeNode               : FooType
     │           └── VariableDeclaratorNode              : record
-    ├── MessageDeclarationNode                          : @namespace("foo.bar") add
+    ├── MessageDeclarationNode                          : add
     │   ├── ResultTypeNode                              :
     │   │   └── TypeNode                                :
     │   │       └── PrimitiveTypeNode                   : int
@@ -243,7 +243,7 @@ ProtocolDeclarationNode                                 : @namespace("foo.bar") 
     │           ├── TypeNode                            :
     │           │   └── PrimitiveTypeNode               : int
     │           └── VariableDeclaratorNode              : arg2
-    └── MessageDeclarationNode                          : @namespace("foo.bar") echoBytes
+    └── MessageDeclarationNode                          : echoBytes
         ├── ResultTypeNode                              :
         │   └── TypeNode                                :
         │       └── PrimitiveTypeNode                   : bytes

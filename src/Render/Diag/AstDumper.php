@@ -11,6 +11,7 @@ use Avro\Node\DeclarationNode;
 use Avro\Node\JsonNode;
 use Avro\Node\LogicalTypeNode;
 use Avro\Node\MessageDeclarationNode;
+use Avro\Node\NamedDeclarationNode;
 use Avro\Node\PrimitiveTypeNode;
 use Avro\Node\RecordDeclarationNode;
 use Avro\Node\ReferenceTypeNode;
@@ -55,7 +56,7 @@ class AstDumper implements Visitor
 
         $writer->write($line, ':');
 
-        if ($node instanceof DeclarationNode && !$node->getNamespace()->isEmpty()) {
+        if ($node instanceof NamedDeclarationNode && !$node->getNamespace()->isEmpty()) {
             $writer->write(' @namespace("', $node->getNamespace()->getValue(), '")');
         }
 

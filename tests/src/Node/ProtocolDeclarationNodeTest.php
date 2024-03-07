@@ -14,8 +14,9 @@ use Avro\Tests\AvroTestCase;
  * @covers \Avro\Node\ProtocolDeclarationNode
  * @uses   \Avro\AvroName
  * @uses   \Avro\AvroNamespace
- * @uses   \Avro\Shared\EntityMap
  * @uses   \Avro\Node\DeclarationNode
+ * @uses   \Avro\Node\NamedDeclarationNode
+ * @uses   \Avro\Shared\EntityMap
  * @uses   \Avro\Tree\AstNode
  * @uses   \Avro\Tree\Comments
  * @uses   \Avro\Tree\Properties

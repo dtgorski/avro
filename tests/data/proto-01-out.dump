@@ -37,7 +37,7 @@ ProtocolDeclarationNode                                 : @namespace("org.apache
     │       ├── TypeNode                                :
     │       │   └── PrimitiveTypeNode                   : string
     │       └── VariableDeclaratorNode                  : message
-    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") hello
+    ├── MessageDeclarationNode                          : hello
     │   ├── ResultTypeNode                              :
     │   │   └── TypeNode                                :
     │   │       └── PrimitiveTypeNode                   : string
@@ -46,7 +46,7 @@ ProtocolDeclarationNode                                 : @namespace("org.apache
     │           ├── TypeNode                            :
     │           │   └── PrimitiveTypeNode               : string
     │           └── VariableDeclaratorNode              : greeting
-    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") echo
+    ├── MessageDeclarationNode                          : echo
     │   ├── ResultTypeNode                              :
     │   │   └── TypeNode                                :
     │   │       └── ReferenceTypeNode                   : TestRecord
@@ -55,7 +55,7 @@ ProtocolDeclarationNode                                 : @namespace("org.apache
     │           ├── TypeNode                            :
     │           │   └── ReferenceTypeNode               : TestRecord
     │           └── VariableDeclaratorNode              : record
-    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") add
+    ├── MessageDeclarationNode                          : add
     │   ├── ResultTypeNode                              :
     │   │   └── TypeNode                                :
     │   │       └── PrimitiveTypeNode                   : int
@@ -68,7 +68,7 @@ ProtocolDeclarationNode                                 : @namespace("org.apache
     │           ├── TypeNode                            :
     │           │   └── PrimitiveTypeNode               : int
     │           └── VariableDeclaratorNode              : arg2
-    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") echoBytes
+    ├── MessageDeclarationNode                          : echoBytes
     │   ├── ResultTypeNode                              :
     │   │   └── TypeNode                                :
     │   │       └── PrimitiveTypeNode                   : bytes
@@ -77,13 +77,13 @@ ProtocolDeclarationNode                                 : @namespace("org.apache
     │           ├── TypeNode                            :
     │           │   └── PrimitiveTypeNode               : bytes
     │           └── VariableDeclaratorNode              : data
-    ├── MessageDeclarationNode                          : @namespace("org.apache.avro.test") error
+    ├── MessageDeclarationNode                          : error
     │   ├── ResultTypeNode                              : void
     │   ├── FormalParametersNode                        :
     │   └── ErrorListNode                               :
     │       └── TypeNode                                :
     │           └── ReferenceTypeNode                   : TestError
-    └── MessageDeclarationNode                          : @namespace("org.apache.avro.test") ping
+    └── MessageDeclarationNode                          : ping
         ├── ResultTypeNode                              : void
         ├── FormalParametersNode                        :
         └── TypeNode                                    :

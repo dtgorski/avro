@@ -59,7 +59,7 @@ class AstDumper implements Visitor
             $writer->write(' @namespace("', $node->getNamespace()->getValue(), '")');
         }
         if (!$node->getProperties()->isEmpty()) {
-            $writer->write(' @', trim(json_encode($node->getProperties()->asArray())));
+            $writer->write(' @', trim(json_encode($node->getProperties())));
         }
 
         switch (true) {

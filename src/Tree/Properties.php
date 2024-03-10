@@ -8,21 +8,11 @@ namespace Avro\Tree;
 
 use Avro\Shared\EntityMap;
 
-/** @extends EntityMap<int, Property> */
+/** @extends EntityMap<string, Property> */
 class Properties extends EntityMap implements \JsonSerializable
 {
-    public function getByName(string $name): Property|null
+    public function jsonSerialize(): array
     {
-        foreach ($this->asArray() as $property) {
-            if ($name === $property->getName()) {
-                return $property;
-            }
-        }
-        return null;
-    }
-
-    public function jsonSerialize(): object
-    {
-        return (object)$this->asArray();
+        return array_values($this->asArray());
     }
 }

@@ -10,7 +10,6 @@ namespace Avro\Shared;
  * @template K of array-key
  * @template V of mixed
  * @implements \IteratorAggregate<K, V>
- * @internal
  */
 class EntityMap implements \IteratorAggregate
 {
@@ -21,7 +20,7 @@ class EntityMap implements \IteratorAggregate
     }
 
     /** @psalm-suppress UnsafeInstantiation */
-    public static function fromArray(array $elements): static
+    public static function fromKeyValue(array $elements): static
     {
         return new static($elements);
     }

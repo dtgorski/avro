@@ -646,16 +646,16 @@ class AvdlParser extends JsonParser
      */
     protected function parsePropertiesSkipNamespace(): Properties
     {
-        $props = [];
+        $properties = [];
         while ($this->expect(Token::AT)) {
             $this->consume(Token::AT);
             $property = $this->parseProperty();
 
             if ($property->getName() != 'namespace') {
-                $props[] = $property;
+                $properties[$property->getName()] = $property;
             }
         }
-        return Properties::fromArray($props);
+        return Properties::fromKeyValue($properties);
     }
 
     /**
@@ -675,7 +675,7 @@ class AvdlParser extends JsonParser
             $property = $this->parseProperty();
 
             if ($property->getName() != 'namespace') {
-                $properties[] = $property;
+                $properties[$property->getName()] = $property;
                 continue;
             }
             if (is_string($property->getJson())) {
@@ -688,7 +688,7 @@ class AvdlParser extends JsonParser
             );
         }
         return new PropertiesWithNamespace(
-            Properties::fromArray($properties),
+            Properties::fromKeyValue($properties),
             AvroNamespace::fromString($namespace)
         );
     }
@@ -768,7 +768,7 @@ class AvdlParser extends JsonParser
     /** @return Comments */
     private function drainCommentStack(): Comments
     {
-        return Comments::fromArray($this->getCursor()->getCommentStack()->drain());
+        return Comments::fromKeyValue($this->getCursor()->getCommentStack()->drain());
     }
 
     // @formatter:off

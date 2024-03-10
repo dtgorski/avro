@@ -22,16 +22,19 @@ class PropertiesTest extends AvroTestCase
         $property1 = new Property('foo', 1);
         $property2 = new Property('bar', 2);
 
-        $properties = Properties::fromArray([$property1, $property2]);
+        $properties = Properties::fromKeyValue([
+            'foo' => $property1,
+            'bar' => $property2
+        ]);
 
-        $this->assertSame($property1, $properties->getByName('foo'));
-        $this->assertSame($property2, $properties->getByName('bar'));
+        $this->assertSame($property1, $properties->get('foo'));
+        $this->assertSame($property2, $properties->get('bar'));
 
-        $this->assertSame(null, $properties->getByName(''));
+        $this->assertSame(null, $properties->get(''));
         $this->assertSame(2, $properties->size());
 
-        $this->assertEquals([$property1, $property2], $properties->asArray());
-        $this->assertEquals('{"0":{"foo":1},"1":{"bar":2}}', json_encode($properties));
+        $this->assertEquals(['foo' => $property1, 'bar' => $property2], $properties->asArray());
+        $this->assertEquals('[{"foo":1},{"bar":2}]', json_encode($properties));
         $this->assertSame($property1, $properties->getIterator()->current());
     }
 }

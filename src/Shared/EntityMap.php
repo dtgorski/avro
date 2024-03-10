@@ -42,7 +42,7 @@ class EntityMap implements \IteratorAggregate
      */
     public function get(mixed $key): mixed
     {
-        return array_key_exists($key, $this->elements) ? $this->elements[$key] : null;
+        return $this->has($key) ? $this->elements[$key] : null;
     }
 
     /** @return V[] */

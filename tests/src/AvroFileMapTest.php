@@ -36,6 +36,19 @@ class AvroFileMapTest extends AvroTestCase
         $this->assertTrue($map->has($srcFile2));
     }
 
+    public function testGet(): void
+    {
+        $map = new AvroFileMap();
+
+        $path = AvroFilePath::fromString('foo');
+        $this->assertNull($map->get($path));
+
+        $node = $this->createMock(Visitable::class);
+        $map->set($path, $node);
+
+        $this->assertSame($node, $map->get($path));
+    }
+
     public function testGetIterator(): void
     {
         $srcFile1 = $this->createMock(AvroFilePath::class);

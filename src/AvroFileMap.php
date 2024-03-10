@@ -25,6 +25,11 @@ class AvroFileMap implements \IteratorAggregate
         return array_key_exists($sourceFile->getPath(), $this->asArray());
     }
 
+    public function get(AvroFilePath $sourceFile): ?Visitable
+    {
+        return $this->has($sourceFile) ? $this->elements[$sourceFile->getPath()] : null;
+    }
+
     /** @return array<string, Visitable> */
     public function asArray(): array
     {

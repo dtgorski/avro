@@ -1,4 +1,4 @@
-ProtocolDeclarationNode                                 : @namespace("org.apache.avro.test")
+ProtocolDeclarationNode                                 : @namespace("org.apache.avro.test") Simple
     ├── EnumDeclarationNode                             : @namespace("org.apache.avro.test") @[{"aliases":["org.foo.KindOf"]}]
     │   ├── EnumConstantNode                            :
     │   ├── EnumConstantNode                            :
@@ -8,11 +8,11 @@ ProtocolDeclarationNode                                 : @namespace("org.apache
     │   ├── FieldDeclarationNode                        :
     │   │   ├── TypeNode                                :
     │   │   │   └── PrimitiveTypeNode                   : string
-    │   │   └── VariableDeclaratorNode                  : name @[{"order":"ignore"}]
+    │   │   └── VariableDeclaratorNode                  : @[{"order":"ignore"}] name
     │   ├── FieldDeclarationNode                        :
     │   │   ├── TypeNode                                :
     │   │   │   └── ReferenceTypeNode                   : Kind
-    │   │   └── VariableDeclaratorNode                  : kind @[{"order":"descending"}]
+    │   │   └── VariableDeclaratorNode                  : @[{"order":"descending"}] kind
     │   ├── FieldDeclarationNode                        :
     │   │   ├── TypeNode                                :
     │   │   │   └── ReferenceTypeNode                   : MD5
@@ -24,7 +24,7 @@ ProtocolDeclarationNode                                 : @namespace("org.apache
     │   │   │       │   └── PrimitiveTypeNode           : null
     │   │   │       └── TypeNode                        :
     │   │   │           └── ReferenceTypeNode           : MD5
-    │   │   └── VariableDeclaratorNode                  : nullableHash @[{"aliases":["hash"]}]
+    │   │   └── VariableDeclaratorNode                  : @[{"aliases":["hash"]}] nullableHash
     │   │       └── JsonValueNode                       : null
     │   └── FieldDeclarationNode                        :
     │       ├── TypeNode                                :

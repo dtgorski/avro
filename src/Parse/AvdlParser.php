@@ -107,8 +107,10 @@ class AvdlParser extends JsonParser
             /** @var DeclarationNode $node calms static analysis down. */
             $node = $this->parseDeclaration();
 
-            if ($node instanceof NamedDeclarationNode && $node->getNamespace()->isEmpty()) {
-                $node->setNamespace($namespace);
+            if ($node instanceof NamedDeclarationNode) {
+                if ($node->getNamespace()->isEmpty()) {
+                    $node->setNamespace($namespace);
+                }
             }
             $nodes[] = $node;
         }

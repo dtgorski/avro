@@ -7,12 +7,12 @@ declare(strict_types=1);
 namespace Avro\Render\Diag;
 
 use Avro\Node\DecimalTypeNode;
-use Avro\Node\DeclarationNode;
 use Avro\Node\JsonNode;
 use Avro\Node\LogicalTypeNode;
 use Avro\Node\MessageDeclarationNode;
 use Avro\Node\NamedDeclarationNode;
 use Avro\Node\PrimitiveTypeNode;
+use Avro\Node\ProtocolDeclarationNode;
 use Avro\Node\RecordDeclarationNode;
 use Avro\Node\ReferenceTypeNode;
 use Avro\Node\ResultTypeNode;
@@ -25,7 +25,6 @@ use Avro\Visitor;
 use Avro\Write\StandardWriter;
 use Avro\Write\Writer;
 
-/** @internal */
 class AstDumper implements Visitor
 {
     public function __construct(
@@ -59,6 +58,9 @@ class AstDumper implements Visitor
         if ($node instanceof NamedDeclarationNode && !$node->getNamespace()->isEmpty()) {
             $writer->write(' @namespace("', $node->getNamespace()->getValue(), '")');
         }
+        if (!$node->getProperties()->isEmpty()) {
+            $writer->write(' @', trim(json_encode($node->getProperties()->asArray())));
+        }
 
         switch (true) {
             case $node instanceof DecimalTypeNode:
@@ -70,16 +72,12 @@ class AstDumper implements Visitor
             case $node instanceof LogicalTypeNode:
                 $writer->write(' ', $node->getType()->value);
                 break;
-            case $node instanceof MessageDeclarationNode:
-                $writer->write(' ', $node->getName()->getValue());
-                break;
+
             case $node instanceof PrimitiveTypeNode:
                 $writer->write(' ', $node->getType()->value);
                 $writer->write($nullableType($node));
                 break;
-            case $node instanceof RecordDeclarationNode:
-                $writer->write(' ', $node->getName()->getValue());
-                break;
+
             case $node instanceof ReferenceTypeNode:
                 $writer->write(' ', $node->getReference()->getQualifiedName());
                 $writer->write($nullableType($node));
@@ -87,16 +85,16 @@ class AstDumper implements Visitor
             case $node instanceof ResultTypeNode && $node->isVoid():
                 $writer->write(' void');
                 break;
+
+            case $node instanceof MessageDeclarationNode:
+            case $node instanceof ProtocolDeclarationNode:
+            case $node instanceof RecordDeclarationNode:
             case $node instanceof VariableDeclaratorNode:
                 $writer->write(' ', $node->getName()->getValue());
                 break;
         }
 
-        if (!$node->getProperties()->isEmpty()) {
-            $writer->write(' @', trim(json_encode($node->getProperties()->asArray())));
-        }
         $this->writer->write("\n");
-
         return true;
     }
 

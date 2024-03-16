@@ -21,12 +21,14 @@ class LogicalTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var LogicalTypeNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof LogicalTypeNode) {
+            parent::visit($node);
 
-        $this->writePropertiesSingleLine($node->getProperties());
-        $this->write($node->getType()->value);
+            $this->writePropertiesSingleLine($node->getProperties());
+            $this->write($node->getType()->value);
 
-        return false;
+            return false;
+        }
+        return true;
     }
 }

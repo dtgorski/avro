@@ -21,12 +21,13 @@ class ResultTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var ResultTypeNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof ResultTypeNode) {
+            parent::visit($node);
 
-        if ($node->isVoid()) {
-            $this->write('void');
-            return false;
+            if ($node->isVoid()) {
+                $this->write('void');
+                return false;
+            }
         }
         return true;
     }

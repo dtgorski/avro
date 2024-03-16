@@ -21,24 +21,24 @@ class RecordDeclarationNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var RecordDeclarationNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof RecordDeclarationNode) {
+            parent::visit($node);
 
-        $this->write($this->indent());
-        $this->writeln('record ', $this->guardKeyword($node->getName()->getValue()), ' {');
-
-        $this->stepIn();
-
+            $this->write($this->indent());
+            $this->writeln('record ', $this->guardKeyword($node->getName()->getValue()), ' {');
+            $this->stepIn();
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->stepOut();
-        $this->writeln($this->indent(), '}');
+        if ($node instanceof RecordDeclarationNode) {
+            $this->stepOut();
+            $this->writeln($this->indent(), '}');
 
-        /** @var RecordDeclarationNode $node calms static analysis down. */
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace Avro\Tests\Render\Avdl\Handler;
 
 use Avro\AvroName;
 use Avro\Node\FixedDeclarationNode;
+use Avro\Node\TypeNode;
 use Avro\Tests\AvroTestCase;
 use Avro\Render\Avdl\Handler\FixedDeclarationNodeHandler;
 use Avro\Render\Avdl\HandlerContext;
@@ -20,6 +21,7 @@ use Avro\Write\BufferedWriter;
  * @uses   \Avro\Node\DeclarationNode
  * @uses   \Avro\Node\FixedDeclarationNode
  * @uses   \Avro\Node\NamedDeclarationNode
+ * @uses   \Avro\Node\TypeNode
  * @uses   \Avro\Render\Avdl\HandlerAbstract
  * @uses   \Avro\Render\Avdl\HandlerContext
  * @uses   \Avro\Shared\EntityMap
@@ -40,5 +42,7 @@ class FixedDeclarationNodeHandlerTest extends AvroTestCase
 
         $this->assertTrue($handler->canHandle($node));
         $this->assertEquals("\nfixed foo(42);\n", $writer->getBuffer());
+
+        $this->assertTrue($handler->visit(new TypeNode()));
     }
 }

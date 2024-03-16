@@ -21,24 +21,24 @@ class UnionTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var UnionTypeNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof UnionTypeNode) {
+            parent::visit($node);
 
-        $this->write('union {');
-
-        if ($node->nodeCount() > 0) {
-            $this->write(' ');
+            $this->write('union {');
+            if ($node->nodeCount() > 0) {
+                $this->write(' ');
+            }
         }
-
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->write(' }');
+        if ($node instanceof UnionTypeNode) {
+            $this->write(' }');
 
-        /** @var UnionTypeNode $node calms static analysis down. */
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

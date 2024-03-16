@@ -21,23 +21,24 @@ class JsonArrayNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var JsonArrayNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof JsonArrayNode) {
+            parent::visit($node);
 
-        if ($node->prevNode()) {
-            $this->write(', ');
+            if ($node->prevNode()) {
+                $this->write(', ');
+            }
+            $this->write('[');
         }
-        $this->write('[');
-
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        /** @var JsonArrayNode $node calms static analysis down. */
-        parent::leave($node);
+        if ($node instanceof JsonArrayNode) {
+            parent::leave($node);
 
-        $this->write(']');
+            $this->write(']');
+        }
     }
 }

@@ -22,23 +22,23 @@ class FormalParametersNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var FormalParametersNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof FormalParametersNode) {
+            parent::visit($node);
 
-        /** @var MessageDeclarationNode $message calms static analysis down. */
-        $message = $node->parentNode();
-
-        $this->write(' ', $this->guardKeyword($message->getName()->getValue()), '(');
-
+            if (($message = $node->parentNode()) && $message instanceof MessageDeclarationNode) {
+                $this->write(' ', $this->guardKeyword($message->getName()->getValue()), '(');
+            }
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->write(')');
+        if ($node instanceof FormalParametersNode) {
+            $this->write(')');
 
-        /** @var FormalParametersNode $node calms static analysis down. */
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

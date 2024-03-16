@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Avro\Tests\Render\Avdl\Handler;
 
 use Avro\Node\LogicalTypeNode;
+use Avro\Node\TypeNode;
 use Avro\Tests\AvroTestCase;
 use Avro\Tree\Properties;
 use Avro\Tree\Property;
@@ -18,6 +19,7 @@ use Avro\Write\BufferedWriter;
 /**
  * @covers \Avro\Render\Avdl\Handler\LogicalTypeNodeHandler
  * @uses   \Avro\Node\LogicalTypeNode
+ * @uses   \Avro\Node\TypeNode
  * @uses   \Avro\Render\Avdl\HandlerAbstract
  * @uses   \Avro\Render\Avdl\HandlerContext
  * @uses   \Avro\Shared\EntityMap
@@ -43,5 +45,7 @@ class LogicalTypeNodeHandlerTest extends AvroTestCase
 
         $this->assertTrue($handler->canHandle($node));
         $this->assertEquals('@foo(1) @bar("\u001b") date', $writer->getBuffer());
+
+        $this->assertTrue($handler->visit(new TypeNode()));
     }
 }

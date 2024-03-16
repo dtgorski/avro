@@ -21,28 +21,29 @@ class VariableDeclaratorNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var VariableDeclaratorNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof VariableDeclaratorNode) {
+            parent::visit($node);
 
-        $this->write(' ');
-        $this->writePropertiesSingleLine($node->getProperties());
-        $this->write($this->guardKeyword($node->getName()->getValue()));
+            $this->write(' ');
+            $this->writePropertiesSingleLine($node->getProperties());
+            $this->write($this->guardKeyword($node->getName()->getValue()));
 
-        if ($node->nodeCount()) {
-            $this->write(' = ');
+            if ($node->nodeCount()) {
+                $this->write(' = ');
+            }
         }
-
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        /** @var VariableDeclaratorNode $node calms static analysis down. */
-        if ($node->nextNode()) {
-            $this->write(',');
-        }
+        if ($node instanceof VariableDeclaratorNode) {
+            if ($node->nextNode()) {
+                $this->write(',');
+            }
 
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

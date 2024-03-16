@@ -9,8 +9,10 @@ namespace Avro\Parse;
 use Avro\AvroName;
 use Avro\Node\JsonArrayNode;
 use Avro\Node\JsonFieldNode;
+use Avro\Node\JsonNode;
 use Avro\Node\JsonObjectNode;
 use Avro\Node\JsonValueNode;
+use Avro\Tree\AstNode;
 use Avro\Tree\Node;
 
 /**
@@ -20,19 +22,19 @@ use Avro\Tree\Node;
 class JsonParser extends ParserBase
 {
     /**
-     * @return Node
+     * @return AstNode
      * @throws \Exception
      */
-    public function parse(): Node
+    public function parse(): AstNode
     {
         return $this->parseJson();
     }
 
     /**
-     * @return Node
+     * @return JsonNode
      * @throws \Exception
      */
-    protected function parseJson(): Node
+    protected function parseJson(): JsonNode
     {
         // @formatter:off
         // phpcs:disable
@@ -55,50 +57,50 @@ class JsonParser extends ParserBase
     }
 
     /**
-     * @return Node
+     * @return JsonValueNode
      * @throws \Exception
      */
-    protected function parseJsonString(): Node
+    protected function parseJsonString(): JsonValueNode
     {
         $token = $this->consume(Token::STRING);
         return new JsonValueNode($token->getLoad(), $token->getPosition());
     }
 
     /**
-     * @return Node
+     * @return JsonValueNode
      * @throws \Exception
      */
-    protected function parseJsonNumber(): Node
+    protected function parseJsonNumber(): JsonValueNode
     {
         $token = $this->consume(Token::NUMBER);
         return new JsonValueNode((float) $token->getLoad(), $token->getPosition());
     }
 
     /**
-     * @return Node
+     * @return JsonValueNode
      * @throws \Exception
      */
-    protected function parseJsonBool(): Node
+    protected function parseJsonBool(): JsonValueNode
     {
         $token = $this->consume(Token::IDENT, 'true', 'false');
         return new JsonValueNode($token->getLoad() === 'true', $token->getPosition());
     }
 
     /**
-     * @return Node
+     * @return JsonValueNode
      * @throws \Exception
      */
-    protected function parseJsonNull(): Node
+    protected function parseJsonNull(): JsonValueNode
     {
         $token = $this->consume(Token::IDENT, 'null');
         return new JsonValueNode(null, $token->getPosition());
     }
 
     /**
-     * @return Node
+     * @return JsonArrayNode
      * @throws \Exception
      */
-    protected function parseJsonArray(): Node
+    protected function parseJsonArray(): JsonArrayNode
     {
         $token = $this->consume(Token::LBRACK);
         $node = new JsonArrayNode($token->getPosition());
@@ -116,10 +118,10 @@ class JsonParser extends ParserBase
     }
 
     /**
-     * @return Node
+     * @return JsonObjectNode
      * @throws \Exception
      */
-    protected function parseJsonObject(): Node
+    protected function parseJsonObject(): JsonObjectNode
     {
         $token = $this->consume(Token::LBRACE);
         $node = new JsonObjectNode($token->getPosition());
@@ -137,14 +139,15 @@ class JsonParser extends ParserBase
     }
 
     /**
-     * @return Node
+     * @return JsonFieldNode
      * @throws \Exception
      */
-    protected function parseJsonField(): Node
+    protected function parseJsonField(): JsonFieldNode
     {
         $token = $this->consume(Token::STRING);
         $node = new JsonFieldNode(AvroName::fromString($token->getLoad()), $token->getPosition());
         $this->consume(Token::COLON);
-        return $node->addNode($this->parseJson());
+        $node->addNode($this->parseJson());
+        return $node;
     }
 }

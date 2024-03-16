@@ -35,8 +35,8 @@ use Avro\Node\ResultTypeNode;
 use Avro\Node\TypeNode;
 use Avro\Node\UnionTypeNode;
 use Avro\Node\VariableDeclaratorNode;
+use Avro\Tree\AstNode;
 use Avro\Tree\Comments;
-use Avro\Tree\Node;
 use Avro\Tree\Properties;
 use Avro\Tree\Property;
 use Avro\Type\ErrorType;
@@ -54,10 +54,10 @@ class AvdlParser extends JsonParser
     /**
      * ProtocolDeclaration <EOF>
      *
-     * @return Node
+     * @return AstNode
      * @throws \Exception
      */
-    public function parse(): Node
+    public function parse(): AstNode
     {
         $node = $this->parseProtocolDeclaration();
         $this->consume(Token::EOF);
@@ -68,10 +68,10 @@ class AvdlParser extends JsonParser
     /**
      * ( Property )* "protocol" Identifier ProtocolBody
      *
-     * @return Node
+     * @return ProtocolDeclarationNode
      * @throws \Exception
      */
-    protected function parseProtocolDeclaration(): Node
+    protected function parseProtocolDeclaration(): ProtocolDeclarationNode
     {
         $propertyBag = $this->parsePropertiesWithNamespace();
 
@@ -84,13 +84,14 @@ class AvdlParser extends JsonParser
         $node->setNamespace($propertyBag->getNamespace());
         $node->setComments($this->drainCommentStack());
 
-        return $node->addNode(...$this->parseProtocolBody($propertyBag->getNamespace()));
+        $node->addNode(...$this->parseProtocolBody($propertyBag->getNamespace()));
+        return $node;
     }
 
     /**
      * "{" ( Imports | Options )*  "}"
      *
-     * @return Node[]
+     * @return AstNode[]
      * @throws \Exception
      */
     protected function parseProtocolBody(AvroNamespace $namespace): array
@@ -104,7 +105,6 @@ class AvdlParser extends JsonParser
                 continue;
             }
 
-            /** @var DeclarationNode $node calms static analysis down. */
             $node = $this->parseDeclaration();
 
             if ($node instanceof NamedDeclarationNode) {
@@ -122,10 +122,10 @@ class AvdlParser extends JsonParser
     /**
      * ( ImportIdl | ImportProtocol | ImportSchema )*
      *
-     * @return Node
+     * @return ImportStatementNode
      * @throws \Exception
      */
-    protected function parseImportStatement(): Node
+    protected function parseImportStatement(): ImportStatementNode
     {
         $types = ImportType::values();
         $this->consume(Token::IDENT, 'import');
@@ -139,15 +139,14 @@ class AvdlParser extends JsonParser
     /**
      * ( Property )* ( NamedDeclaration | MessageDeclaration ) )*
      *
-     * @return Node
+     * @return DeclarationNode
      * @throws \Exception
      */
-    protected function parseDeclaration(): Node
+    protected function parseDeclaration(): DeclarationNode
     {
         $propertyBag = $this->parsePropertiesWithNamespace();
 
         if ($this->expect(Token::IDENT, ...NamedType::values())) {
-            /** @var NamedDeclarationNode $node calms static analysis down, */
             $node = $this->parseNamedDeclaration($propertyBag->getProperties());
             $node->setNamespace($propertyBag->getNamespace());
 
@@ -160,10 +159,10 @@ class AvdlParser extends JsonParser
      * ResultType Identifier FormalParameters ( "oneway" | "throws" ErrorList )? ";"
      *
      * @param Properties $properties
-     * @return Node
+     * @return MessageDeclarationNode
      * @throws \Exception
      */
-    protected function parseMessageDeclaration(Properties $properties): Node
+    protected function parseMessageDeclaration(Properties $properties): MessageDeclarationNode
     {
         $type = $this->parseResultType();
         $name = AvroName::fromString($this->parseAnyIdentifier());
@@ -183,10 +182,10 @@ class AvdlParser extends JsonParser
     /**
      *    ( "(" ( FormalParameter ( "," FormalParameter )* )? ")" )
      *
-     * @return Node
+     * @return FormalParametersNode
      * @throws \Exception
      */
-    protected function parseFormalParameters(): Node
+    protected function parseFormalParameters(): FormalParametersNode
     {
         $node = new FormalParametersNode();
         $this->consume(Token::LPAREN);
@@ -205,10 +204,10 @@ class AvdlParser extends JsonParser
     /**
      * Type VariableDeclarator
      *
-     * @return Node
+     * @return FormalParameterNode
      * @throws \Exception
      */
-    protected function parseFormalParameter(): Node
+    protected function parseFormalParameter(): FormalParameterNode
     {
         $node = new FormalParameterNode();
         $type = $this->parseType();
@@ -220,10 +219,10 @@ class AvdlParser extends JsonParser
     /**
      * ReferenceType ( "," ReferenceType )*
      *
-     * @return Node
+     * @return ErrorListNode
      * @throws \Exception
      */
-    protected function parseErrorList(): Node
+    protected function parseErrorList(): ErrorListNode
     {
         $token = $this->consume(Token::IDENT, ...ErrorType::values());
         $node = new ErrorListNode(ErrorType::from($token->getLoad()));
@@ -239,23 +238,25 @@ class AvdlParser extends JsonParser
     /**
      * "oneway"
      *
-     * @return Node
+     * @return TypeNode
      * @throws \Exception
      */
-    protected function parseOnewayStatement(): Node
+    protected function parseOnewayStatement(): TypeNode
     {
         $this->consume(Token::IDENT, 'oneway');
-        return (new TypeNode())->addNode(new OnewayStatementNode());
+        $typeNode = new TypeNode();
+        $typeNode->addNode(new OnewayStatementNode());
+        return $typeNode;
     }
 
     /**
      * ( RecordDeclaration | ErrorDeclaration | EnumDeclaration | FixedDeclaration )
      *
      * @param Properties $properties
-     * @return Node
+     * @return NamedDeclarationNode
      * @throws \Exception
      */
-    protected function parseNamedDeclaration(Properties $properties): Node
+    protected function parseNamedDeclaration(Properties $properties): NamedDeclarationNode
     {
         if ($this->expect(Token::IDENT, 'error')) {
             return $this->parseErrorDeclaration($properties);
@@ -273,10 +274,10 @@ class AvdlParser extends JsonParser
      * "fixed" Identifier "(" <INTEGER> ")" ";"
      *
      * @param Properties $properties
-     * @return Node
+     * @return FixedDeclarationNode
      * @throws \Exception
      */
-    protected function parseFixedDeclaration(Properties $properties): Node
+    protected function parseFixedDeclaration(Properties $properties): FixedDeclarationNode
     {
         $this->consume(Token::IDENT, 'fixed');
         $name = AvroName::fromString($this->parseAnyIdentifier());
@@ -293,10 +294,10 @@ class AvdlParser extends JsonParser
      * "record" Identifier "{" (FieldDeclaration)* "}"
      *
      * @param Properties $properties
-     * @return Node
+     * @return RecordDeclarationNode
      * @throws \Exception
      */
-    protected function parseRecordDeclaration(Properties $properties): Node
+    protected function parseRecordDeclaration(Properties $properties): RecordDeclarationNode
     {
         $this->consume(Token::IDENT, 'record');
 
@@ -318,10 +319,10 @@ class AvdlParser extends JsonParser
      * "error" Identifier "{" (FieldDeclaration)* "}"
      *
      * @param Properties $properties
-     * @return Node
+     * @return ErrorDeclarationNode
      * @throws \Exception
      */
-    protected function parseErrorDeclaration(Properties $properties): Node
+    protected function parseErrorDeclaration(Properties $properties): ErrorDeclarationNode
     {
         $this->consume(Token::IDENT, 'error');
 
@@ -343,10 +344,10 @@ class AvdlParser extends JsonParser
      * "enum" Identifier "{" EnumBody "}" ( <EQ> Identifier )
      *
      * @param Properties $properties
-     * @return Node
+     * @return EnumDeclarationNode
      * @throws \Exception
      */
-    protected function parseEnumDeclaration(Properties $properties): Node
+    protected function parseEnumDeclaration(Properties $properties): EnumDeclarationNode
     {
         $default = '';
         $this->consume(Token::IDENT, 'enum');
@@ -367,13 +368,14 @@ class AvdlParser extends JsonParser
         $node = new EnumDeclarationNode($ident, $default, $properties);
         $node->setComments($this->drainCommentStack());
 
-        return $node->addNode(...$body);
+        $node->addNode(...$body);
+        return $node;
     }
 
     /**
      * ( Identifier ( "," Identifier )* )?
      *
-     * @return Node[]
+     * @return EnumConstantNode[]
      * @throws \Exception
      */
     protected function parseEnumBody(): array
@@ -396,10 +398,10 @@ class AvdlParser extends JsonParser
     /**
      * ( ( Property )* Type VariableDeclarator ( "," VariableDeclarator )* ";" )*
      *
-     * @return Node
+     * @return FieldDeclarationNode
      * @throws \Exception
      */
-    protected function parseFieldDeclaration(): Node
+    protected function parseFieldDeclaration(): FieldDeclarationNode
     {
         $node = new FieldDeclarationNode();
         $type = $this->parseType();
@@ -416,7 +418,7 @@ class AvdlParser extends JsonParser
         return $node;
     }
 
-    protected function ensureDefaultValueMatchesType(JsonNode $json, Node $type): void
+    protected function ensureDefaultValueMatchesType(JsonNode $json, AstNode $type): void
     {
         // FIXME: implement.
     }
@@ -424,11 +426,11 @@ class AvdlParser extends JsonParser
     /**
      * ( Property )* Identifier ( <EQ> JSONValue )?
      *
-     * @param Node $type
-     * @return Node
+     * @param AstNode $type
+     * @return VariableDeclaratorNode
      * @throws \Exception
      */
-    protected function parseVariableDeclarator(Node $type): Node
+    protected function parseVariableDeclarator(AstNode $type): VariableDeclaratorNode
     {
         $props = $this->parsePropertiesSkipNamespace();
         $ident = $this->parseAnyIdentifier();
@@ -437,8 +439,6 @@ class AvdlParser extends JsonParser
 
         if ($this->expect(Token::EQ)) {
             $this->consume(Token::EQ);
-
-            /** @var JsonNode $json calms static analysis down. */
             $json = parent::parseJson();
             $this->ensureDefaultValueMatchesType($json, $type);
 
@@ -450,29 +450,32 @@ class AvdlParser extends JsonParser
     /**
      * "void" | Type
      *
-     * @return Node
+     * @return ResultTypeNode
      * @throws \Exception
      */
-    protected function parseResultType(): Node
+    protected function parseResultType(): ResultTypeNode
     {
         if ($this->expect(Token::IDENT, 'void')) {
             $this->consume(Token::IDENT);
             return new ResultTypeNode(true);
         }
-        return (new ResultTypeNode(false))->addNode($this->parseType());
+        $node = new ResultTypeNode(false);
+        $node->addNode($this->parseType());
+        return $node;
     }
 
     /**
      * ( Property )* ( ReferenceType | PrimitiveType | UnionType | ArrayType | MapType | DecimalType ) "?"?
      *
-     * @return Node
+     * @return TypeNode
      * @throws \Exception
      */
-    protected function parseType(): Node
+    protected function parseType(): TypeNode
     {
         $properties = $this->parsePropertiesSkipNamespace();
 
         $node = $this->parsePrimitiveType($properties);
+        $node = $node ?? $this->parseLogicalType($properties);
         $node = $node ?? $this->parseUnionType($properties);
         $node = $node ?? $this->parseArrayType($properties);
         $node = $node ?? $this->parseMapType($properties);
@@ -486,23 +489,34 @@ class AvdlParser extends JsonParser
         } else {
             $type = new TypeNode();
         }
-        return $type->addNode($node);
+        $type->addNode($node);
+        return $type;
     }
 
     /**
      * "boolean" | "bytes" | "int" | "string" | "float" | ...
      *
      * @param Properties $properties
-     * @return Node|null
+     * @return PrimitiveTypeNode|null
      * @throws \Exception
      */
-    protected function parsePrimitiveType(Properties $properties): Node|null
+    protected function parsePrimitiveType(Properties $properties): PrimitiveTypeNode|null
+    {
+        if ($this->expect(Token::IDENT, ...PrimitiveType::values())) {
+            return new PrimitiveTypeNode(PrimitiveType::from($this->parseIdentifier()), $properties);
+        }
+        return null;
+    }
+
+    /**
+     * @param Properties $properties
+     * @return LogicalTypeNode|null
+     * @throws \Exception
+     */
+    protected function parseLogicalType(Properties $properties): LogicalTypeNode|null
     {
         if ($this->expect(Token::IDENT, ...LogicalType::values())) {
             return new LogicalTypeNode(LogicalType::from($this->parseIdentifier()), $properties);
-        }
-        if ($this->expect(Token::IDENT, ...PrimitiveType::values())) {
-            return new PrimitiveTypeNode(PrimitiveType::from($this->parseIdentifier()), $properties);
         }
         return null;
     }
@@ -511,10 +525,10 @@ class AvdlParser extends JsonParser
      * "decimal" "(" <INTEGER>, <INTEGER> ")"
      *
      * @param Properties $properties
-     * @return Node|null
+     * @return DecimalTypeNode|null
      * @throws \Exception
      */
-    protected function parseDecimalType(Properties $properties): Node|null
+    protected function parseDecimalType(Properties $properties): DecimalTypeNode|null
     {
         if (!$this->expect(Token::IDENT, "decimal")) {
             return null;
@@ -541,17 +555,18 @@ class AvdlParser extends JsonParser
      * "array" "<" Type ">"
      *
      * @param Properties $properties
-     * @return Node|null
+     * @return ArrayTypeNode|null
      * @throws \Exception
      */
-    protected function parseArrayType(Properties $properties): Node|null
+    protected function parseArrayType(Properties $properties): ArrayTypeNode|null
     {
         if (!$this->expect(Token::IDENT, 'array')) {
             return null;
         }
         $this->consume(Token::IDENT);
         $this->consume(Token::LT);
-        $node = (new ArrayTypeNode($properties))->addNode($this->parseType());
+        $node = new ArrayTypeNode($properties);
+        $node->addNode($this->parseType());
         $this->consume(Token::GT);
         return $node;
     }
@@ -560,17 +575,18 @@ class AvdlParser extends JsonParser
      * "map" "<" Type ">"
      *
      * @param Properties $properties
-     * @return Node|null
+     * @return MapTypeNode|null
      * @throws \Exception
      */
-    protected function parseMapType(Properties $properties): Node|null
+    protected function parseMapType(Properties $properties): MapTypeNode|null
     {
         if (!$this->expect(Token::IDENT, 'map')) {
             return null;
         }
         $this->consume(Token::IDENT);
         $this->consume(Token::LT);
-        $node = (new MapTypeNode($properties))->addNode($this->parseType());
+        $node = new MapTypeNode($properties);
+        $node->addNode($this->parseType());
         $this->consume(Token::GT);
         return $node;
     }
@@ -579,17 +595,18 @@ class AvdlParser extends JsonParser
      * "union" "{" Type ( "," Type )* "}"
      *
      * @param Properties $properties
-     * @return Node|null
+     * @return UnionTypeNode|null
      * @throws \Exception
      */
-    protected function parseUnionType(Properties $properties): Node|null
+    protected function parseUnionType(Properties $properties): UnionTypeNode|null
     {
         if (!$this->expect(Token::IDENT, 'union')) {
             return null;
         }
         $this->consume(Token::IDENT);
         $this->consume(Token::LBRACE);
-        $node = (new UnionTypeNode($properties))->addNode($this->parseType());
+        $node = new UnionTypeNode($properties);
+        $node->addNode($this->parseType());
 
         while ($this->expect(Token::COMMA)) {
             $this->consume(Token::COMMA);
@@ -603,10 +620,10 @@ class AvdlParser extends JsonParser
      * ( Identifier ( "." Identifier )* )
      *
      * @param Properties $properties
-     * @return Node
+     * @return ReferenceTypeNode
      * @throws \Exception
      */
-    protected function parseReferenceType(Properties $properties): Node
+    protected function parseReferenceType(Properties $properties): ReferenceTypeNode
     {
         $parts = [];
         $parts[] = $this->parseAnyIdentifierWithHint(self::hintReferenceIdentifier);

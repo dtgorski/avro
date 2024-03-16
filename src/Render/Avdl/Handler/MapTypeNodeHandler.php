@@ -21,20 +21,21 @@ class MapTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var MapTypeNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof MapTypeNode) {
+            parent::visit($node);
 
-        $this->write('map<');
-
+            $this->write('map<');
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->write('>');
+        if ($node instanceof MapTypeNode) {
+            $this->write('>');
 
-        /** @var MapTypeNode $node calms static analysis down. */
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

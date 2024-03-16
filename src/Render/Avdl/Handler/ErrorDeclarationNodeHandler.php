@@ -21,25 +21,24 @@ class ErrorDeclarationNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var ErrorDeclarationNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof ErrorDeclarationNode) {
+            parent::visit($node);
 
-        $this->write($this->indent());
-        $this->writeln('error ', $this->guardKeyword($node->getName()->getValue()), ' {');
-
-        $this->stepIn();
-
+            $this->write($this->indent());
+            $this->writeln('error ', $this->guardKeyword($node->getName()->getValue()), ' {');
+            $this->stepIn();
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->stepOut();
+        if ($node instanceof ErrorDeclarationNode) {
+            $this->stepOut();
+            $this->writeln($this->indent(), '}');
 
-        /** @var ErrorDeclarationNode $node calms static analysis down. */
-        $this->writeln($this->indent(), '}');
-
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

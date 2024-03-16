@@ -8,6 +8,7 @@ namespace Avro\Tests\Render\Json\Handler;
 
 use Avro\Node\JsonArrayNode;
 use Avro\Node\JsonValueNode;
+use Avro\Node\TypeNode;
 use Avro\Shared\Position;
 use Avro\Tests\AvroTestCase;
 use Avro\Render\Json\Handler\JsonValueNodeHandler;
@@ -19,6 +20,7 @@ use Avro\Write\BufferedWriter;
  * @uses   \Avro\Node\JsonArrayNode
  * @uses   \Avro\Node\JsonNode
  * @uses   \Avro\Node\JsonValueNode
+ * @uses   \Avro\Node\TypeNode
  * @uses   \Avro\Render\Json\HandlerAbstract
  * @uses   \Avro\Render\Json\HandlerContext
  * @uses   \Avro\Shared\EntityMap
@@ -61,6 +63,8 @@ class JsonValueNodeHandlerTest extends AvroTestCase
         $this->assertEquals('false', $writer->getBuffer());
 
         $this->assertTrue($handler->canHandle($node));
+
+        $this->assertTrue($handler->visit(new TypeNode()));
     }
 
     public function testVisitWithSiblings(): void

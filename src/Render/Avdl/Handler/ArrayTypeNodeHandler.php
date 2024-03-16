@@ -21,18 +21,20 @@ class ArrayTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        parent::visit($node);
+        if ($node instanceof ArrayTypeNode) {
+            parent::visit($node);
 
-        $this->write('array<');
-
+            $this->write('array<');
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->write('>');
-
-        parent::leave($node);
+        if ($node instanceof ArrayTypeNode) {
+            $this->write('>');
+            parent::leave($node);
+        }
     }
 }

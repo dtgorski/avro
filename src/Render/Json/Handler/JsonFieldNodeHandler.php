@@ -21,14 +21,14 @@ class JsonFieldNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var JsonFieldNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof JsonFieldNode) {
+            parent::visit($node);
 
-        if ($node->prevNode()) {
-            $this->write(', ');
+            if ($node->prevNode()) {
+                $this->write(', ');
+            }
+            $this->write('"', $node->getName()->getValue(), '":');
         }
-        $this->write('"', $node->getName()->getValue(), '":');
-
         return true;
     }
 }

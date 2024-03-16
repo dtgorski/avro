@@ -21,12 +21,12 @@ class DecimalTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        parent::visit($node);
+        if ($node instanceof DecimalTypeNode) {
+            parent::visit($node);
 
-        /** @var DecimalTypeNode $node calms static analysis down. */
-        $this->writePropertiesSingleLine($node->getProperties());
-        $this->write('decimal(', $node->getPrecision(), ', ', $node->getScale(), ')');
-
+            $this->writePropertiesSingleLine($node->getProperties());
+            $this->write('decimal(', $node->getPrecision(), ', ', $node->getScale(), ')');
+        }
         return false;
     }
 }

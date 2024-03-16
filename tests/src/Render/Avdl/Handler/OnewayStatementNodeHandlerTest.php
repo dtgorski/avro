@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Avro\Tests\Render\Avdl\Handler;
 
 use Avro\Node\OnewayStatementNode;
+use Avro\Node\TypeNode;
 use Avro\Tests\AvroTestCase;
 use Avro\Render\Avdl\Handler\OnewayStatementNodeHandler;
 use Avro\Render\Avdl\HandlerContext;
@@ -14,6 +15,7 @@ use Avro\Write\BufferedWriter;
 
 /**
  * @covers \Avro\Render\Avdl\Handler\OnewayStatementNodeHandler
+ * @uses   \Avro\Node\TypeNode
  * @uses   \Avro\Render\Avdl\HandlerAbstract
  * @uses   \Avro\Render\Avdl\HandlerContext
  * @uses   \Avro\Shared\EntityMap
@@ -33,5 +35,7 @@ class OnewayStatementNodeHandlerTest extends AvroTestCase
 
         $this->assertTrue($handler->canHandle($node));
         $this->assertEquals(' oneway', $writer->getBuffer());
+
+        $this->assertTrue($handler->visit(new TypeNode()));
     }
 }

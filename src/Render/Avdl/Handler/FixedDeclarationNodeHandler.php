@@ -21,13 +21,15 @@ class FixedDeclarationNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var FixedDeclarationNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof FixedDeclarationNode) {
+            parent::visit($node);
 
-        $this->write($this->indent());
-        $this->write('fixed ', $this->guardKeyword($node->getName()->getValue()));
-        $this->writeln('(', $node->getValue(), ');');
+            $this->write($this->indent());
+            $this->write('fixed ', $this->guardKeyword($node->getName()->getValue()));
+            $this->writeln('(', $node->getValue(), ');');
 
-        return false;
+            return false;
+        }
+        return true;
     }
 }

@@ -21,22 +21,23 @@ class ProtocolDeclarationNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var ProtocolDeclarationNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof ProtocolDeclarationNode) {
+            parent::visit($node);
 
-        $this->writeln('protocol ', $this->guardKeyword($node->getName()->getValue()), ' {');
-        $this->stepIn();
-
+            $this->writeln('protocol ', $this->guardKeyword($node->getName()->getValue()), ' {');
+            $this->stepIn();
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->stepOut();
-        $this->writeln($this->indent(), '}');
+        if ($node instanceof ProtocolDeclarationNode) {
+            $this->stepOut();
+            $this->writeln($this->indent(), '}');
 
-        /** @var ProtocolDeclarationNode $node calms static analysis down. */
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

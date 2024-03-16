@@ -19,11 +19,21 @@ class FieldDeclarationNodeHandler extends HandlerAbstract
     }
 
     /** @throws \Exception */
+    public function visit(Visitable $node): bool
+    {
+        if ($node instanceof FieldDeclarationNode) {
+            return parent::visit($node);
+        }
+        return true;
+    }
+
+    /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->writeln(';');
+        if ($node instanceof FieldDeclarationNode) {
+            $this->writeln(';');
 
-        /** @var FieldDeclarationNode $node calms static analysis down. */
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

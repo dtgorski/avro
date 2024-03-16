@@ -21,13 +21,13 @@ class FormalParameterNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var FormalParameterNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof FormalParameterNode) {
+            parent::visit($node);
 
-        if ($node->prevNode()) {
-            $this->write(', ');
+            if ($node->prevNode()) {
+                $this->write(', ');
+            }
         }
-
         return true;
     }
 }

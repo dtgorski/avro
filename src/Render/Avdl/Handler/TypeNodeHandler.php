@@ -23,32 +23,32 @@ class TypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var TypeNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof TypeNode) {
+            parent::visit($node);
 
-        if ($node->parentNode() instanceof DeclarationNode) {
-            if (!$node->nodeAt(0) instanceof OnewayStatementNode) {
-                $this->write($this->indent());
+            if ($node->parentNode() instanceof DeclarationNode) {
+                if (!$node->nodeAt(0) instanceof OnewayStatementNode) {
+                    $this->write($this->indent());
+                }
+            } else {
+                $this->writePropertiesSingleLine($node->getProperties());
             }
-        } else {
-            $this->writePropertiesSingleLine($node->getProperties());
         }
-
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        /** @var TypeNode $node calms static analysis down. */
-        if ($node->isNullable()) {
-            $this->write('?');
-        }
+        if ($node instanceof TypeNode) {
+            if ($node->isNullable()) {
+                $this->write('?');
+            }
+            if ($node->nextNode() instanceof TypeNode) {
+                $this->write(', ');
+            }
 
-        if ($node->nextNode() instanceof TypeNode) {
-            $this->write(', ');
+            parent::leave($node);
         }
-
-        parent::leave($node);
     }
 }

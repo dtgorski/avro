@@ -6,11 +6,11 @@ declare(strict_types=1);
 
 namespace Avro\Parse;
 
-use Avro\Tree\Node;
+use Avro\Tree\AstNode;
 
 /** @internal */
 interface Parser
 {
     /** @throws \Exception */
-    public function parse(): Node;
+    public function parse(): AstNode;
 }

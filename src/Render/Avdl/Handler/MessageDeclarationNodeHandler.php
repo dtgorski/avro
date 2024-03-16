@@ -21,20 +21,21 @@ class MessageDeclarationNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var MessageDeclarationNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof MessageDeclarationNode) {
+            parent::visit($node);
 
-        $this->write($this->indent());
-
+            $this->write($this->indent());
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->writeln(';');
+        if ($node instanceof MessageDeclarationNode) {
+            $this->writeln(';');
 
-        /** @var MessageDeclarationNode $node calms static analysis down. */
-        parent::leave($node);
+            parent::leave($node);
+        }
     }
 }

@@ -21,29 +21,29 @@ class EnumDeclarationNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var EnumDeclarationNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof EnumDeclarationNode) {
+            parent::visit($node);
 
-        $this->write($this->indent());
-        $this->writeln('enum ', $this->guardKeyword($node->getName()->getValue()), ' {');
-
-        $this->stepIn();
-
+            $this->write($this->indent());
+            $this->writeln('enum ', $this->guardKeyword($node->getName()->getValue()), ' {');
+            $this->stepIn();
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        $this->stepOut();
+        if ($node instanceof EnumDeclarationNode) {
+            $this->stepOut();
 
-        /** @var EnumDeclarationNode $node calms static analysis down. */
-        if ($node->getDefault() != '') {
-            $this->writeln($this->indent(), '} = ', $node->getDefault(), ';');
-        } else {
-            $this->writeln($this->indent(), '}');
+            if ($node->getDefault() != '') {
+                $this->writeln($this->indent(), '} = ', $node->getDefault(), ';');
+            } else {
+                $this->writeln($this->indent(), '}');
+            }
+
+            parent::leave($node);
         }
-
-        parent::leave($node);
     }
 }

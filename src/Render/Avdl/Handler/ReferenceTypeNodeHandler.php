@@ -21,12 +21,12 @@ class ReferenceTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var ReferenceTypeNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof ReferenceTypeNode) {
+            parent::visit($node);
 
-        $this->writePropertiesSingleLine($node->getProperties());
-        $this->write($node->getReference()->getQualifiedName());
-
+            $this->writePropertiesSingleLine($node->getProperties());
+            $this->write($node->getReference()->getQualifiedName());
+        }
         return true;
     }
 }

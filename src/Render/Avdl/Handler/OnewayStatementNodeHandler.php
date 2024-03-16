@@ -21,11 +21,13 @@ class OnewayStatementNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var OnewayStatementNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof OnewayStatementNode) {
+            parent::visit($node);
 
-        $this->write(' oneway');
+            $this->write(' oneway');
 
-        return false;
+            return false;
+        }
+        return true;
     }
 }

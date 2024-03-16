@@ -21,11 +21,11 @@ class ErrorListNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var ErrorListNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof ErrorListNode) {
+            parent::visit($node);
 
-        $this->write(' ', $node->getType()->value, ' ');
-
+            $this->write(' ', $node->getType()->value, ' ');
+        }
         return true;
     }
 }

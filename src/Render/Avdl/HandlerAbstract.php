@@ -10,9 +10,9 @@ use Avro\Node\DeclarationNode;
 use Avro\Node\FieldDeclarationNode;
 use Avro\Node\NamedDeclarationNode;
 use Avro\Node\ProtocolDeclarationNode;
+use Avro\Render\NodeHandler;
 use Avro\Tree\Comments;
 use Avro\Tree\Properties;
-use Avro\Render\NodeHandler;
 use Avro\Visitable;
 
 /** @internal */
@@ -66,9 +66,8 @@ abstract class HandlerAbstract implements NodeHandler
 
             /** @var NamedDeclarationNode|null $parent calms static analysis down. */
             $parent = $node->parentNode();
-            $sameNs = $parent != null && $parent->getNamespace()->equals($namespace);
 
-            if (!$sameNs) {
+            if (!($parent != null && $parent->getNamespace()->equals($namespace))) {
                 $this->write($this->indent(), '@namespace');
                 $this->writeln('("', $namespace->getValue(), '")');
             }

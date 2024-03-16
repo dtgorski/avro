@@ -21,12 +21,14 @@ class PrimitiveTypeNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var PrimitiveTypeNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof PrimitiveTypeNode) {
+            parent::visit($node);
 
-        $this->writePropertiesSingleLine($node->getProperties());
-        $this->write($node->getType()->value);
+            $this->writePropertiesSingleLine($node->getProperties());
+            $this->write($node->getType()->value);
 
-        return false;
+            return false;
+        }
+        return true;
     }
 }

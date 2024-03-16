@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Avro\Tests\Render\Avdl\Handler;
 
 use Avro\Node\PrimitiveTypeNode;
+use Avro\Node\TypeNode;
 use Avro\Tests\AvroTestCase;
 use Avro\Type\PrimitiveType;
 use Avro\Render\Avdl\Handler\PrimitiveTypeNodeHandler;
@@ -16,6 +17,7 @@ use Avro\Write\BufferedWriter;
 /**
  * @covers \Avro\Render\Avdl\Handler\PrimitiveTypeNodeHandler
  * @uses   \Avro\Node\PrimitiveTypeNode
+ * @uses   \Avro\Node\TypeNode
  * @uses   \Avro\Render\Avdl\HandlerAbstract
  * @uses   \Avro\Render\Avdl\HandlerContext
  * @uses   \Avro\Shared\EntityMap
@@ -35,5 +37,7 @@ class PrimitiveTypeNodeHandlerTest extends AvroTestCase
 
         $this->assertTrue($handler->canHandle($node));
         $this->assertEquals('double', $writer->getBuffer());
+
+        $this->assertTrue($handler->visit(new TypeNode()));
     }
 }

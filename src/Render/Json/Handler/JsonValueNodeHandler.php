@@ -21,32 +21,34 @@ class JsonValueNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var JsonValueNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof JsonValueNode) {
+            parent::visit($node);
 
-        if ($node->prevNode()) {
-            $this->write(', ');
-        }
-        $val = $node->getValue();
+            if ($node->prevNode()) {
+                $this->write(', ');
+            }
+            $val = $node->getValue();
 
-        switch (true) {
-            case is_float($val):
-                $this->write(json_encode($val));
-                break;
-            case is_string($val):
-                $this->write($this->escapeJson($val));
-                break;
-            case $val === null:
-                $this->write('null');
-                break;
-            case $val === true:
-                $this->write('true');
-                break;
-            case $val === false:
-                $this->write('false');
-                break;
+            switch (true) {
+                case is_float($val):
+                    $this->write(json_encode($val));
+                    break;
+                case is_string($val):
+                    $this->write($this->escapeJson($val));
+                    break;
+                case $val === null:
+                    $this->write('null');
+                    break;
+                case $val === true:
+                    $this->write('true');
+                    break;
+                case $val === false:
+                    $this->write('false');
+                    break;
+            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     private function escapeJson(string $json): string

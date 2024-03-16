@@ -21,23 +21,24 @@ class JsonObjectNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var JsonObjectNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof JsonObjectNode) {
+            parent::visit($node);
 
-        if ($node->prevNode()) {
-            $this->write(', ');
+            if ($node->prevNode()) {
+                $this->write(', ');
+            }
+            $this->write('{');
         }
-        $this->write('{');
-
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        /** @var JsonObjectNode $node calms static analysis down. */
-        parent::leave($node);
+        if ($node instanceof JsonObjectNode) {
+            parent::leave($node);
 
-        $this->write('}');
+            $this->write('}');
+        }
     }
 }

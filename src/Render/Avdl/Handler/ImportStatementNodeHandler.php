@@ -21,17 +21,18 @@ class ImportStatementNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var ImportStatementNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof ImportStatementNode) {
+            parent::visit($node);
 
-        if (!$node->prevNode() instanceof ImportStatementNode) {
-            $this->writeln();
+            if (!$node->prevNode() instanceof ImportStatementNode) {
+                $this->writeln();
+            }
+            $name = $node->getType()->value;
+            $path = $node->getPath();
+            $this->writeln($this->indent(), 'import ', $name, ' "', $path, '";');
+
+            return false;
         }
-
-        $name = $node->getType()->value;
-        $path = $node->getPath();
-        $this->writeln($this->indent(), 'import ', $name, ' "', $path, '";');
-
-        return false;
+        return true;
     }
 }

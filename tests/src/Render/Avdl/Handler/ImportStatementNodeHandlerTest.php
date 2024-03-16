@@ -9,6 +9,7 @@ namespace Avro\Tests\Render\Avdl\Handler;
 use Avro\AvroName;
 use Avro\Node\ImportStatementNode;
 use Avro\Node\ProtocolDeclarationNode;
+use Avro\Node\TypeNode;
 use Avro\Tests\AvroTestCase;
 use Avro\Type\ImportType;
 use Avro\Render\Avdl\Handler\ImportStatementNodeHandler;
@@ -23,6 +24,7 @@ use Avro\Write\BufferedWriter;
  * @uses   \Avro\Node\ImportStatementNode
  * @uses   \Avro\Node\NamedDeclarationNode
  * @uses   \Avro\Node\ProtocolDeclarationNode
+ * @uses   \Avro\Node\TypeNode
  * @uses   \Avro\Render\Avdl\HandlerAbstract
  * @uses   \Avro\Render\Avdl\HandlerContext
  * @uses   \Avro\Shared\EntityMap
@@ -43,6 +45,8 @@ class ImportStatementNodeHandlerTest extends AvroTestCase
 
         $this->assertTrue($handler->canHandle($node));
         $this->assertEquals("\nimport idl \"foo\";\n", $writer->getBuffer());
+
+        $this->assertTrue($handler->visit(new TypeNode()));
     }
 
     public function testVisitWithSiblingNodes(): void

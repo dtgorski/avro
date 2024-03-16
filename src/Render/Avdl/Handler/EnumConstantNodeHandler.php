@@ -21,25 +21,25 @@ class EnumConstantNodeHandler extends HandlerAbstract
     /** @throws \Exception */
     public function visit(Visitable $node): bool
     {
-        /** @var EnumConstantNode $node calms static analysis down. */
-        parent::visit($node);
+        if ($node instanceof EnumConstantNode) {
+            parent::visit($node);
 
-        $this->write($this->indent());
-        $this->write($this->guardKeyword($node->getName()->getValue()));
-
+            $this->write($this->indent());
+            $this->write($this->guardKeyword($node->getName()->getValue()));
+        }
         return true;
     }
 
     /** @throws \Exception */
     public function leave(Visitable $node): void
     {
-        /** @var EnumConstantNode $node calms static analysis down. */
-        if ($node->nextNode()) {
-            $this->write(',');
+        if ($node instanceof EnumConstantNode) {
+            if ($node->nextNode()) {
+                $this->write(',');
+            }
+            $this->writeln();
+
+            parent::leave($node);
         }
-
-        $this->writeln();
-
-        parent::leave($node);
     }
 }

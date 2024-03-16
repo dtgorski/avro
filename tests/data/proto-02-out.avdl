@@ -4,7 +4,7 @@ protocol ProtocolName {
 
 	fixed x(42);
 
-	@`fixed`("")
+	@`fixed`({"s":"-","n":42,"b":true,"a":[1,2,3],"o":{"k":"v"},"u":null})
 	fixed _(42);
 
 	@annotated(1)

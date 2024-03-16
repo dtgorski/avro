@@ -1,6 +1,6 @@
 ProtocolDeclarationNode                                 : @namespace("foo.bar") @[{"name-space-$":{"x":"y"}}] ProtocolName
     ├── FixedDeclarationNode                            : @namespace("foo.bar")
-    ├── FixedDeclarationNode                            : @namespace("foo.bar") @[{"fixed":""}]
+    ├── FixedDeclarationNode                            : @namespace("foo.bar") @[{"fixed":{"s":"-","n":42,"b":true,"a":[1,2,3],"o":{"k":"v"},"u":null}}]
     ├── ErrorDeclarationNode                            : @namespace("foo.bar") @[{"annotated":1}]
     │   └── FieldDeclarationNode                        :
     │       ├── TypeNode                                :

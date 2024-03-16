@@ -43,14 +43,12 @@ class AstDumper implements Visitor
         $edges = $this->edges($node);
 
         $line = sprintf('%s%s', $edges, $name);
-        $len1 = strlen($line);
-        $len2 = strlen(utf8_decode($line));
-        $line = substr($line . str_repeat(' ', 56), 0, 56 - ($len2 - $len1));
+        $line = sprintf('%s%s', $line, str_repeat(' ', 56));
+        $line = substr($line, 0, 56 + substr_count($line, "\xE2") * 2);
 
-        $nullableType = function (Node $node): string {
-            /** @var TypeNode $type calms static analysis down. */
+        $nullableType = function (AstNode $node): string {
             $type = $node->parentNode();
-            return $type->isNullable() ? '?' : '';
+            return $type instanceof TypeNode && $type->isNullable() ? '?' : '';
         };
 
         $writer->write($line, ':');

@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Avro\Tests\Render\Avdl;
 
 use Avro\Avro;
-use Avro\Render\Diag\AstDumper;
 use Avro\Tests\AvroTestCase;
 use Avro\Visitor;
 use Avro\Write\BufferedWriter;
@@ -129,7 +128,7 @@ class AvdlRenderTest extends AvroTestCase
         $this->assertEquals($expect, $writer->getBuffer());
     }
 
-    public function provideInputOutput(): array
+    public static function provideInputOutput(): array
     {
         return [
             ["proto-01-in.avdl", "proto-01-out.avdl"],

@@ -7,11 +7,7 @@ declare(strict_types=1);
 namespace Avro\Tests\Render\Diag;
 
 use Avro\Avro;
-use Avro\Node\FieldDeclarationNode;
-use Avro\Node\PrimitiveTypeNode;
-use Avro\Node\TypeNode;
 use Avro\Tests\AvroTestCase;
-use Avro\Type\PrimitiveType;
 use Avro\Render\Diag\AstDumper;
 use Avro\Write\BufferedWriter;
 
@@ -89,7 +85,7 @@ class AstDumperTest extends AvroTestCase
         $this->assertEquals($expect, $writer->getBuffer());
     }
 
-    public function provideInputOutput(): array
+    public static function provideInputOutput(): array
     {
         return [
             ["proto-01-in.avdl", "proto-01-out.dump"],

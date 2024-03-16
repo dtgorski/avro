@@ -25,7 +25,7 @@ class AvroNameTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function provideValidNames(): array
+    public static function provideValidNames(): array
     {
         return [['x'], ['xy'], ['_'], ['$']];
     }
@@ -37,7 +37,7 @@ class AvroNameTest extends TestCase
         AvroName::fromString($name);
     }
 
-    public function provideInvalidNames(): array
+    public static function provideInvalidNames(): array
     {
         return [[''], ['.'], ['.x'], ['x.'], ['1'], ['x.1'], ['x-y'], ['_x.']];
     }

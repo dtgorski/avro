@@ -43,7 +43,7 @@ class LexerTest extends AvroTestCase
         return new CommentAwareCursor((new Lexer())->createTokenStream($reader));
     }
 
-    public function provideValidNumbers(): array
+    public static function provideValidNumbers(): array
     {
         // @formatter:off
         return [
@@ -108,7 +108,7 @@ class LexerTest extends AvroTestCase
         $this->closeStream($stream);
     }
 
-    public function provideInvalidNumbers(): array
+    public static function provideInvalidNumbers(): array
     {
         // @formatter:off
         return [
@@ -146,7 +146,7 @@ class LexerTest extends AvroTestCase
         $this->closeStream($stream);
     }
 
-    private function provideValidSequences(): array
+    public static function provideValidSequences(): array
     {
         // @formatter:off
         return [
@@ -217,7 +217,7 @@ class LexerTest extends AvroTestCase
         $this->closeStream($stream);
     }
 
-    private function provideMangledSequences(): array
+    public static function provideMangledSequences(): array
     {
         // @formatter:off
         return [

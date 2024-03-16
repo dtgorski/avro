@@ -24,7 +24,7 @@ class AvroNamespaceTest extends AvroTestCase
         $this->assertTrue(true);
     }
 
-    public function provideValidNamespaceNames(): array
+    public static function provideValidNamespaceNames(): array
     {
         return [
             [''], ['_'], ['x'], ['x.y'], ['x.y.z'], ['x1.y.z'], ['x_'], ['_x'],
@@ -38,7 +38,7 @@ class AvroNamespaceTest extends AvroTestCase
         AvroNamespace::fromString($namespace);
     }
 
-    public function provideInvalidNamespaceNames(): array
+    public static function provideInvalidNamespaceNames(): array
     {
         return [
             ['.'], ['.x'], ['x.'], ['1'], ['x.1'], ['x-y'], ['_x.']

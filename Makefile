@@ -21,6 +21,8 @@ update: clean                                    # Updates ./vendor dependencies
 test: clean .autoload                            # Executes unit tests
 	@XDEBUG_MODE=coverage $(BIN)/phpunit -c ./tests/phpunit.xml $(ARGS) && if test -t 1 && test -z "$${PLATFORM}"; then echo "View in browser: <\e[32mfile://$(PWD)/tests/reports/coverage/index.html\e[0m>\n"; fi
 
+test-all: sniff analyse test                     # Runs linter, static analysis, unit tests
+
 sniff: clean .autoload                           # Runs linter on source and tests
 	@if test `grep -rHEL "^// MIT" ./src/ ./tests/src/ | wc -l` != "0"; then echo "Missing License:"; grep -rHEL "^// MIT" ./src/ ./tests/src/; fi
 	@if test `grep -rHEL "^declar" ./src/ ./tests/src/ | wc -l` != "0"; then echo "Missing declare:"; grep -rHEL "^declar" ./src/ ./tests/src/; fi

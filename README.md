@@ -20,6 +20,7 @@ $ make
  make install        Installs ./vendor dependencies
  make update         Updates ./vendor dependencies
  make test           Executes unit tests
+ make test-all       Runs linter, static analysis, unit tests
  make sniff          Runs linter on source and tests
  make sniff-fix      Tries to fix linter complaints
  make analyse        Performs static analysis
